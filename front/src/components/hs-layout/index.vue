@@ -142,19 +142,6 @@ export default {
   background: #fff;
 }
 
-.page-top-search {
-  ::v-deep .el-form-item {
-    margin-left: 32px;
-  }
-
-  ::v-deep .el-date-editor.el-input,
-  ::v-deep .el-date-editor.el-input__inner,
-  ::v-deep .el-input,
-  ::v-deep .el-select,
-  ::v-deep .el-date-picker {
-    width: 240px;
-  }
-}
 // 有左边栏的样式覆盖
 .hs-page-all {
   .hs-has-sidebar {

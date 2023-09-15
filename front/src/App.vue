@@ -1,6 +1,6 @@
 <template>
   <div :class="['full ovh app-box', isDev && 'has-dev-menu']">
-    <hs-app-menu v-if="isDev" :menuList="menuList" />
+    <hs-app-menu :menuList="menuList" :isCollapse="isCollapse" />
     <router-view />
   </div>
 </template>

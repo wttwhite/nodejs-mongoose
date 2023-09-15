@@ -5,7 +5,7 @@ var cookieParser = require('cookie-parser')
 var logger = require('morgan')
 
 var typesRouter = require('./routes/api/types')
-// var usersRouter = require('./routes/users');
+var timeRecordRouter = require('./routes/api/timeRecord')
 
 var app = express()
 
@@ -20,6 +20,7 @@ app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
 
 app.use('/api/context-seat/types', typesRouter)
+app.use('/api/context-seat/timeRecord', timeRecordRouter)
 
 // app.use('/users', usersRouter);
 

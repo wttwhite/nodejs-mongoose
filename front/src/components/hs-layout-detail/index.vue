@@ -43,25 +43,5 @@ export default {
     justify-content: center;
     align-items: center;
   }
-  ::v-deep .el-form {
-    .el-form-item {
-      width: calc(100% - 10px);
-    }
-    .el-input__inner,
-    .el-cascader,
-    .el-select {
-      width: 100%;
-      max-width: 240px;
-    }
-    .el-input-number--small {
-      width: auto;
-    }
-    .el-textarea__inner {
-      // width: 360px;
-    }
-    .el-date-editor--datetimerange {
-      width: 340px;
-    }
-  }
 }
 </style>

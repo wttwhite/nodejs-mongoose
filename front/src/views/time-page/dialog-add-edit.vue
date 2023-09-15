@@ -8,12 +8,34 @@
       label-width="200px"
       style="margin-right: 200px; margin-top: 40px"
     >
-      <el-form-item label="类型名称" prop="label">
+      <el-form-item label="类型" prop="labelId">
+        <el-select v-model="formData.labelId">
+          <el-option
+            v-for="(item, index) in labelList"
+            :key="index"
+            :value="item._id"
+            :label="item.label"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="跟进时间" prop="time">
+        <el-date-picker
+          v-model="formData.time"
+          type="datetime"
+          value-format="yyyy-MM-dd HH:mm"
+          format="yyyy-MM-dd HH:mm"
+        >
+        </el-date-picker>
+      </el-form-item>
+      <el-form-item label="备注" prop="remark">
         <el-input
-          v-model="formData.label"
+          type="textarea"
+          v-model="formData.remark"
           clearable
-          maxlength="50"
+          maxlength="500"
           placeholder="请输入"
+          :rows="5"
+          show-word-limit
         />
       </el-form-item>
     </el-form>
@@ -26,18 +48,30 @@
   </el-dialog>
 </template>
 <script>
-import { addTypes, updateTypes } from '@/apis/index'
+import { addTimeRecord, updateTimeRecord } from '@/apis/index'
+import dayjs from 'dayjs'
 export default {
   name: 'add-edit-dialog',
+  props: {
+    labelList: {
+      type: Array,
+      default: () => {
+        return []
+      },
+    },
+  },
   data() {
     return {
       loading: false,
       dialogFormVisible: false,
       formData: {
-        label: '',
+        labelId: '',
+        time: dayjs(new Date()).format('YYYY-MM-DD HH:mm'),
+        remark: '',
       },
       rules: {
-        label: [{ required: true, message: ' ' }],
+        labelId: [{ required: true, message: ' ' }],
+        time: [{ required: true, message: ' ' }],
       },
     }
   },
@@ -56,14 +90,20 @@ export default {
     saveClick() {
       this.$refs['formRef'].validate(async (valid) => {
         if (!valid || this.loading) return
-        const params = { ...this.formData }
+        const labelSelectedInx = this.labelList.findIndex((item) => {
+          return item._id === this.formData.labelId
+        })
+        const params = {
+          ...this.formData,
+          label: this.labelList[labelSelectedInx].label,
+        }
         this.loading = true
         try {
           if (this.formData._id) {
-            await updateTypes(params)
+            await updateTimeRecord(params)
             this.$message.success('编辑成功')
           } else {
-            await addTypes(params)
+            await addTimeRecord(params)
             this.$message.success('新增成功')
           }
           this.loading = false

@@ -10,12 +10,14 @@
       @submit.prevent
     >
       <el-form-item label="类型">
-        <el-input
-          v-model="searchForm.label"
-          clearable
-          maxlength="50"
-          placeholder="请输入"
-        />
+        <el-select v-model="searchForm.labelId">
+          <el-option
+            v-for="(item, index) in labelList"
+            :key="index"
+            :value="item._id"
+            :label="item.label"
+          ></el-option>
+        </el-select>
       </el-form-item>
       <el-form-item class="common-search-btn-box">
         <el-button type="primary" icon="el-icon-search" @click="getDataList(1)">
@@ -42,8 +44,9 @@
       :header-cell-style="$HeaderCellStyle"
     >
       <el-table-column type="index" label="序号" width="60" />
-      <el-table-column prop="_id" label="_id" />
+      <el-table-column prop="time" label="时间" />
       <el-table-column prop="label" label="类型" />
+      <el-table-column prop="remark" label="备注" />
       <el-table-column label="操作">
         <template slot-scope="{ row }">
           <el-button type="text" @click="editClick(row)">编辑</el-button>
@@ -51,7 +54,11 @@
         </template>
       </el-table-column>
     </el-table>
-    <addEditDialogVue ref="addEditDialogVue" @updateTable="updateTable" />
+    <addEditDialogVue
+      ref="addEditDialogVue"
+      :labelList="labelList"
+      @updateTable="updateTable"
+    />
     <hs-pagination
       slot="footer"
       @refresh="getDataList"
@@ -64,33 +71,40 @@
 <script>
 import { getPageDataApi, deleteApi } from '@/apis/common'
 import addEditDialogVue from './dialog-add-edit.vue'
+import { queryTypesAll } from '@/apis/index'
 const DefaultSearchForm = () => {
   return {
     pageNo: 1,
     pageSize: 10,
-    label: '',
+    labelId: '',
   }
 }
 export default {
-  name: 'types-page',
+  name: 'time-page',
   components: { addEditDialogVue },
   data() {
     return {
       tableLoading: false,
-      breadcrumbList: ['普通表格页面'],
+      breadcrumbList: ['时间记录'],
       pageTotal: 0,
       pageData: [],
       searchForm: DefaultSearchForm(),
       DefaultSearchForm: Object.freeze(DefaultSearchForm()),
-      pageUrl: '/types/queryTypes',
+      pageUrl: '/timeRecord/queryTimeRecord',
+      labelList: [],
     }
   },
   created() {
+    this.getAllTypes()
     this.getDataList(1)
   },
   methods: {
     updateTable() {
       this.getDataList(1)
+    },
+    async getAllTypes() {
+      const data = await queryTypesAll()
+      this.labelList = data || []
     },
     addClick() {
       this.$refs.addEditDialogVue.showDialog()
@@ -104,7 +118,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning',
       }).then(async () => {
-        await deleteApi('/types/deleteTypes', {
+        await deleteApi('/timeRecord/deleteTimeRecord', {
           _id: row._id,
         })
         this.$message.success('删除成功')

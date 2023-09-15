@@ -1,5 +1,6 @@
 import VueRouter from 'vue-router'
 import typesPage from '@/views/types-page'
+import timePage from '@/views/time-page'
 const routes = [
   {
     path: '/',
@@ -13,6 +14,15 @@ const routes = [
       menu: true,
     },
     component: typesPage,
+  },
+  {
+    path: '/timePage',
+    name: 'timePage',
+    meta: {
+      name: '时间记录',
+      menu: true,
+    },
+    component: timePage,
   },
 ]
 
